@@ -1,19 +1,31 @@
-const express = require('express');
-const passport = require('passport');
-const { register, login } = require('../controllers/authController');
+const express = require("express");
+const passport = require("passport");
+const {
+  register,
+  login,
+  forgetPassword,
+  resetPassword,
+} = require("../controllers/authController");
 const router = express.Router();
 
-router.post('/register', register);
-router.post('/login', login);
+router.post("/register", register);
+router.post("/login", login);
+router.post("/forget-password", forgetPassword);
+router.post("/reset-password/:token", resetPassword);
 
 // Google OAuth
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get(
-    '/google/callback',
-    passport.authenticate('google', { failureRedirect: 'http://localhost:5173/' }),
-    (req, res) => {
-        res.redirect('http://localhost:5173/');
-    }
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: process.env.FRONTEND_URL,
+  }),
+  (req, res) => {
+    res.redirect(`${process.env.FRONTEND_URL}?login=google-success`);
+  }
 );
 
 module.exports = router;

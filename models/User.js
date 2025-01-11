@@ -6,6 +6,8 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String },
     googleId: { type: String },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 // Hash the password before saving
